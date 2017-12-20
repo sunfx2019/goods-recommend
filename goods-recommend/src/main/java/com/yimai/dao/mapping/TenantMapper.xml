@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yimai.dao.TenantMapper" >
+  <resultMap id="BaseResultMap" type="com.yimai.entity.Tenant" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="stringId" property="stringid" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="ratingRangeMin" property="ratingrangemin" jdbcType="INTEGER" />
+    <result column="ratingRangeMax" property="ratingrangemax" jdbcType="INTEGER" />
+    <result column="ratingRangeNeutral" property="ratingrangeneutral" jdbcType="DOUBLE" />
+    <result column="active" property="active" jdbcType="BIT" />
+    <result column="operatorid" property="operatorid" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="creationdate" property="creationdate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yimai.entity.TenantWithBLOBs" extends="BaseResultMap" >
+    <result column="tenantConfig" property="tenantconfig" jdbcType="LONGVARBINARY" />
+    <result column="tenantStatistic" property="tenantstatistic" jdbcType="LONGVARBINARY" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, stringId, description, ratingRangeMin, ratingRangeMax, ratingRangeNeutral, active, 
+    operatorid, url, creationdate
+  </sql>
+  <sql id="Blob_Column_List" >
+    tenantConfig, tenantStatistic
+  </sql>
+  
+  <select id="getAll" resultMap="ResultMapWithBLOBs" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tenant
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tenant
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tenant
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yimai.entity.TenantWithBLOBs" >
+    insert into tenant (id, stringId, description, 
+      ratingRangeMin, ratingRangeMax, ratingRangeNeutral, 
+      active, operatorid, url, 
+      creationdate, tenantConfig, tenantStatistic
+      )
+    values (#{id,jdbcType=INTEGER}, #{stringid,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{ratingrangemin,jdbcType=INTEGER}, #{ratingrangemax,jdbcType=INTEGER}, #{ratingrangeneutral,jdbcType=DOUBLE}, 
+      #{active,jdbcType=BIT}, #{operatorid,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{creationdate,jdbcType=TIMESTAMP}, #{tenantconfig,jdbcType=LONGVARBINARY}, #{tenantstatistic,jdbcType=LONGVARBINARY}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yimai.entity.TenantWithBLOBs" >
+    insert into tenant
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="stringid != null" >
+        stringId,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="ratingrangemin != null" >
+        ratingRangeMin,
+      </if>
+      <if test="ratingrangemax != null" >
+        ratingRangeMax,
+      </if>
+      <if test="ratingrangeneutral != null" >
+        ratingRangeNeutral,
+      </if>
+      <if test="active != null" >
+        active,
+      </if>
+      <if test="operatorid != null" >
+        operatorid,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="creationdate != null" >
+        creationdate,
+      </if>
+      <if test="tenantconfig != null" >
+        tenantConfig,
+      </if>
+      <if test="tenantstatistic != null" >
+        tenantStatistic,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="stringid != null" >
+        #{stringid,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="ratingrangemin != null" >
+        #{ratingrangemin,jdbcType=INTEGER},
+      </if>
+      <if test="ratingrangemax != null" >
+        #{ratingrangemax,jdbcType=INTEGER},
+      </if>
+      <if test="ratingrangeneutral != null" >
+        #{ratingrangeneutral,jdbcType=DOUBLE},
+      </if>
+      <if test="active != null" >
+        #{active,jdbcType=BIT},
+      </if>
+      <if test="operatorid != null" >
+        #{operatorid,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="creationdate != null" >
+        #{creationdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tenantconfig != null" >
+        #{tenantconfig,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="tenantstatistic != null" >
+        #{tenantstatistic,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yimai.entity.TenantWithBLOBs" >
+    update tenant
+    <set >
+      <if test="stringid != null" >
+        stringId = #{stringid,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="ratingrangemin != null" >
+        ratingRangeMin = #{ratingrangemin,jdbcType=INTEGER},
+      </if>
+      <if test="ratingrangemax != null" >
+        ratingRangeMax = #{ratingrangemax,jdbcType=INTEGER},
+      </if>
+      <if test="ratingrangeneutral != null" >
+        ratingRangeNeutral = #{ratingrangeneutral,jdbcType=DOUBLE},
+      </if>
+      <if test="active != null" >
+        active = #{active,jdbcType=BIT},
+      </if>
+      <if test="operatorid != null" >
+        operatorid = #{operatorid,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="creationdate != null" >
+        creationdate = #{creationdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tenantconfig != null" >
+        tenantConfig = #{tenantconfig,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="tenantstatistic != null" >
+        tenantStatistic = #{tenantstatistic,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yimai.entity.TenantWithBLOBs" >
+    update tenant
+    set stringId = #{stringid,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      ratingRangeMin = #{ratingrangemin,jdbcType=INTEGER},
+      ratingRangeMax = #{ratingrangemax,jdbcType=INTEGER},
+      ratingRangeNeutral = #{ratingrangeneutral,jdbcType=DOUBLE},
+      active = #{active,jdbcType=BIT},
+      operatorid = #{operatorid,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      creationdate = #{creationdate,jdbcType=TIMESTAMP},
+      tenantConfig = #{tenantconfig,jdbcType=LONGVARBINARY},
+      tenantStatistic = #{tenantstatistic,jdbcType=LONGVARBINARY}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yimai.entity.Tenant" >
+    update tenant
+    set stringId = #{stringid,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      ratingRangeMin = #{ratingrangemin,jdbcType=INTEGER},
+      ratingRangeMax = #{ratingrangemax,jdbcType=INTEGER},
+      ratingRangeNeutral = #{ratingrangeneutral,jdbcType=DOUBLE},
+      active = #{active,jdbcType=BIT},
+      operatorid = #{operatorid,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      creationdate = #{creationdate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

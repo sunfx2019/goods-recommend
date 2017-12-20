@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yimai.dao.ItemMapper" >
+  <resultMap id="BaseResultMap" type="com.yimai.entity.Item" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="tenantId" property="tenantid" jdbcType="INTEGER" />
+    <result column="itemid" property="itemid" jdbcType="VARCHAR" />
+    <result column="itemtype" property="itemtype" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="imageurl" property="imageurl" jdbcType="VARCHAR" />
+    <result column="active" property="active" jdbcType="BIT" />
+    <result column="creationdate" property="creationdate" jdbcType="TIMESTAMP" />
+    <result column="changedate" property="changedate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yimai.entity.Item" extends="BaseResultMap" >
+    <result column="profileData" property="profiledata" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <select id="getAll" resultMap="BaseResultMap">
+  	select * from item
+  </select>
+  
+  <select id="getByIds" resultMap="BaseResultMap">
+  	select * from item where id in
+  	<foreach collection="list" item="id" open="(" close=")" separator=",">
+        #{id}
+    </foreach>
+  </select>
+  
+  <sql id="Base_Column_List" >
+    id, tenantId, itemid, itemtype, description, url, imageurl, active, creationdate, 
+    changedate
+  </sql>
+  <sql id="Blob_Column_List" >
+    profileData
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from item
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from item
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yimai.entity.Item" >
+    insert into item (id, tenantId, itemid, 
+      itemtype, description, url, 
+      imageurl, active, creationdate, 
+      changedate, profileData)
+    values (#{id,jdbcType=INTEGER}, #{tenantid,jdbcType=INTEGER}, #{itemid,jdbcType=VARCHAR}, 
+      #{itemtype,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{imageurl,jdbcType=VARCHAR}, #{active,jdbcType=BIT}, #{creationdate,jdbcType=TIMESTAMP}, 
+      #{changedate,jdbcType=TIMESTAMP}, #{profiledata,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yimai.entity.Item" >
+    insert into item
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="tenantid != null" >
+        tenantId,
+      </if>
+      <if test="itemid != null" >
+        itemid,
+      </if>
+      <if test="itemtype != null" >
+        itemtype,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="imageurl != null" >
+        imageurl,
+      </if>
+      <if test="active != null" >
+        active,
+      </if>
+      <if test="creationdate != null" >
+        creationdate,
+      </if>
+      <if test="changedate != null" >
+        changedate,
+      </if>
+      <if test="profiledata != null" >
+        profileData,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="tenantid != null" >
+        #{tenantid,jdbcType=INTEGER},
+      </if>
+      <if test="itemid != null" >
+        #{itemid,jdbcType=VARCHAR},
+      </if>
+      <if test="itemtype != null" >
+        #{itemtype,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="imageurl != null" >
+        #{imageurl,jdbcType=VARCHAR},
+      </if>
+      <if test="active != null" >
+        #{active,jdbcType=BIT},
+      </if>
+      <if test="creationdate != null" >
+        #{creationdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="changedate != null" >
+        #{changedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="profiledata != null" >
+        #{profiledata,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yimai.entity.Item" >
+    update item
+    <set >
+      <if test="tenantid != null" >
+        tenantId = #{tenantid,jdbcType=INTEGER},
+      </if>
+      <if test="itemid != null" >
+        itemid = #{itemid,jdbcType=VARCHAR},
+      </if>
+      <if test="itemtype != null" >
+        itemtype = #{itemtype,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="imageurl != null" >
+        imageurl = #{imageurl,jdbcType=VARCHAR},
+      </if>
+      <if test="active != null" >
+        active = #{active,jdbcType=BIT},
+      </if>
+      <if test="creationdate != null" >
+        creationdate = #{creationdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="changedate != null" >
+        changedate = #{changedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="profiledata != null" >
+        profileData = #{profiledata,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yimai.entity.Item" >
+    update item
+    set tenantId = #{tenantid,jdbcType=INTEGER},
+      itemid = #{itemid,jdbcType=VARCHAR},
+      itemtype = #{itemtype,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      imageurl = #{imageurl,jdbcType=VARCHAR},
+      active = #{active,jdbcType=BIT},
+      creationdate = #{creationdate,jdbcType=TIMESTAMP},
+      changedate = #{changedate,jdbcType=TIMESTAMP},
+      profileData = #{profiledata,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yimai.entity.Item" >
+    update item
+    set tenantId = #{tenantid,jdbcType=INTEGER},
+      itemid = #{itemid,jdbcType=VARCHAR},
+      itemtype = #{itemtype,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      imageurl = #{imageurl,jdbcType=VARCHAR},
+      active = #{active,jdbcType=BIT},
+      creationdate = #{creationdate,jdbcType=TIMESTAMP},
+      changedate = #{changedate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

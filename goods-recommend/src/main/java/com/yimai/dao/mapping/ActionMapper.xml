@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yimai.dao.ActionMapper" >
+  <resultMap id="BaseResultMap" type="com.yimai.entity.Action" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="tenantId" property="tenantid" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="sessionId" property="sessionid" jdbcType="VARCHAR" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="itemId" property="itemid" jdbcType="INTEGER" />
+    <result column="itemTypeId" property="itemtypeid" jdbcType="INTEGER" />
+    <result column="actionTypeId" property="actiontypeid" jdbcType="INTEGER" />
+    <result column="ratingValue" property="ratingvalue" jdbcType="INTEGER" />
+    <result column="actionInfo" property="actioninfo" jdbcType="VARCHAR" />
+    <result column="actionTime" property="actiontime" jdbcType="TIMESTAMP" />
+    <result column="isUse" property="isuse" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, tenantId, userId, sessionId, ip, itemId, itemTypeId, actionTypeId, ratingValue, 
+    actionInfo, actionTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from action
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="queryByActionType" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select * from action where actionTypeId = #{actionTypeId}
+  </select>
+  
+  <select id="queryActionMahoutDataForActionType" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select id, userId, itemId, ratingValue from action where isuse = 0 and actionTypeId = #{actionTypeId}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from action
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yimai.entity.Action" >
+    insert into action (id, tenantId, userId, 
+      sessionId, ip, itemId, 
+      itemTypeId, actionTypeId, ratingValue, 
+      actionInfo, actionTime)
+    values (#{id,jdbcType=INTEGER}, #{tenantid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+      #{sessionid,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{itemid,jdbcType=INTEGER}, 
+      #{itemtypeid,jdbcType=INTEGER}, #{actiontypeid,jdbcType=INTEGER}, #{ratingvalue,jdbcType=INTEGER}, 
+      #{actioninfo,jdbcType=VARCHAR}, #{actiontime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <update id="updateUseState" parameterType="java.util.List">
+  	update action set isuse = 1 where id in
+  	<foreach collection="list" item="id" open="(" close=")" separator=",">
+        #{id}
+    </foreach> 
+  </update>
+  
+  <insert id="insertSelective" parameterType="com.yimai.entity.Action" >
+    insert into action
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="tenantid != null" >
+        tenantId,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="sessionid != null" >
+        sessionId,
+      </if>
+      <if test="ip != null" >
+        ip,
+      </if>
+      <if test="itemid != null" >
+        itemId,
+      </if>
+      <if test="itemtypeid != null" >
+        itemTypeId,
+      </if>
+      <if test="actiontypeid != null" >
+        actionTypeId,
+      </if>
+      <if test="ratingvalue != null" >
+        ratingValue,
+      </if>
+      <if test="actioninfo != null" >
+        actionInfo,
+      </if>
+      <if test="actiontime != null" >
+        actionTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="tenantid != null" >
+        #{tenantid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="sessionid != null" >
+        #{sessionid,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="itemid != null" >
+        #{itemid,jdbcType=INTEGER},
+      </if>
+      <if test="itemtypeid != null" >
+        #{itemtypeid,jdbcType=INTEGER},
+      </if>
+      <if test="actiontypeid != null" >
+        #{actiontypeid,jdbcType=INTEGER},
+      </if>
+      <if test="ratingvalue != null" >
+        #{ratingvalue,jdbcType=INTEGER},
+      </if>
+      <if test="actioninfo != null" >
+        #{actioninfo,jdbcType=VARCHAR},
+      </if>
+      <if test="actiontime != null" >
+        #{actiontime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yimai.entity.Action" >
+    update action
+    <set >
+      <if test="tenantid != null" >
+        tenantId = #{tenantid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="sessionid != null" >
+        sessionId = #{sessionid,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="itemid != null" >
+        itemId = #{itemid,jdbcType=INTEGER},
+      </if>
+      <if test="itemtypeid != null" >
+        itemTypeId = #{itemtypeid,jdbcType=INTEGER},
+      </if>
+      <if test="actiontypeid != null" >
+        actionTypeId = #{actiontypeid,jdbcType=INTEGER},
+      </if>
+      <if test="ratingvalue != null" >
+        ratingValue = #{ratingvalue,jdbcType=INTEGER},
+      </if>
+      <if test="actioninfo != null" >
+        actionInfo = #{actioninfo,jdbcType=VARCHAR},
+      </if>
+      <if test="actiontime != null" >
+        actionTime = #{actiontime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yimai.entity.Action" >
+    update action
+    set tenantId = #{tenantid,jdbcType=INTEGER},
+      userId = #{userid,jdbcType=INTEGER},
+      sessionId = #{sessionid,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      itemId = #{itemid,jdbcType=INTEGER},
+      itemTypeId = #{itemtypeid,jdbcType=INTEGER},
+      actionTypeId = #{actiontypeid,jdbcType=INTEGER},
+      ratingValue = #{ratingvalue,jdbcType=INTEGER},
+      actionInfo = #{actioninfo,jdbcType=VARCHAR},
+      actionTime = #{actiontime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

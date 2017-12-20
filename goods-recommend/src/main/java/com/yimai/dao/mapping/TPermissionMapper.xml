@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yimai.dao.TPermissionMapper">
+	<resultMap id="BaseResultMap" type="com.yimai.entity.TPermission">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, url, name
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select 'false' as QUERYID,
+		<include refid="Base_Column_List" />
+		from t_permission
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="findUserPermissions" resultType="java.lang.String" parameterType="java.lang.String">
+		select distinct(p.url) from t_user u, t_role r, t_user_role ur, t_role_permission rp, t_permission p where u.id = ur.uid and ur.rid = r.id and r.id = rp.rid and rp.pid = p.id and u.nickname = #{userName,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getAll" resultMap="BaseResultMap">
+		select * from t_permission
+	</select>
+	
+	<select id="findPermissionRole" resultType="java.util.Map">
+		select r.name, p.url from t_role_permission rp, t_role r, t_permission p WHERE rp.rid = r.id and rp.pid = p.id
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from t_permission
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.yimai.entity.TPermission">
+		insert into t_permission (id, url, name)
+		values (#{id,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.yimai.entity.TPermission">
+		insert into t_permission
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.yimai.entity.TPermission">
+		update t_permission
+		<set>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.yimai.entity.TPermission">
+		update t_permission
+		set url = #{url,jdbcType=VARCHAR},
+		name = #{name,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

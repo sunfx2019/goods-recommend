@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yimai.dao.ItemTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.yimai.entity.ItemType" >
+    <result column="tenantId" property="tenantid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="visible" property="visible" jdbcType="BIT" />
+  </resultMap>
+  
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	select * from itemtype where id = #{id}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResultMap">
+  	select * from itemtype
+  </select>
+  
+  <insert id="insert" parameterType="com.yimai.entity.ItemType" >
+    insert into itemtype (tenantId, name, id, 
+      visible)
+    values (#{tenantid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{id,jdbcType=INTEGER}, 
+      #{visible,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yimai.entity.ItemType" >
+    insert into itemtype
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tenantid != null" >
+        tenantId,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="visible != null" >
+        visible,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tenantid != null" >
+        #{tenantid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="visible != null" >
+        #{visible,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans    
+                        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd    
+                        http://www.springframework.org/schema/context    
+                        http://www.springframework.org/schema/context/spring-context-4.0.xsd    
+                        http://www.springframework.org/schema/mvc    
+                        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+                        http://www.springframework.org/schema/tx  
+						http://www.springframework.org/schema/tx/spring-tx-4.0.xsd  
+						http://www.springframework.org/schema/aop  
+						http://www.springframework.org/schema/aop/spring-aop-4.0.xsd  
+						http://www.springframework.org/schema/task  
+						http://www.springframework.org/schema/task/spring-task-4.0.xsd
+						">
+	
+	<!-- Spring Shiro -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor" />
+	
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
+	    <property name="exceptionMappings">  
+	        <props>  
+	            <prop key="org.apache.shiro.authz.UnauthorizedException">  
+	                /unauthorized  
+	            </prop>  
+	            <prop key="org.apache.shiro.authz.UnauthenticatedException">  
+	                /unauthenticated  
+	            </prop>  
+	        </props>  
+	    </property>  
+	</bean>
+	
+	<!-- 会话Session ID生成器 -->
+	<bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
+	
+	<!-- 自定义ShiroFilterFactoryBean管理器-->
+	<bean id="shiroFilterManage" class="com.yimai.web.security.ShiroFilterFactoryBeanManage">
+		<property name="userService" ref="userServiceImpl"/>
+		<property name="permissService" ref="permissServiceImpl"/>
+	</bean>
+
+	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+	<!-- 缓存管理 -->  
+    <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
+
+	<bean id="myRealm" class="com.yimai.web.security.MyRealm">
+		<property name="userService" ref="userServiceImpl"/>
+	</bean>
+
+	<!-- 安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="myRealm" />
+		<property name="cacheManager" ref="cacheManager" />
+	</bean>
+
+	<!-- 判断是否登陆 -->
+	<bean id="loginFilter" class="com.yimai.web.security.filter.LoginFilter"/>
+	<!-- 判断是否有其中的一个角色 -->
+	<bean id="anyRolesFilter" class="com.yimai.web.security.filter.RoleFilter"/>
+	<!-- 判断是否有该URL的权限 -->
+	<bean id="permissionFilter" class="com.yimai.web.security.filter.PermissionFilter"/>
+
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/login.shtml" />
+		<property name="successUrl" value="/index.shtml" />
+		<property name="unauthorizedUrl" value="/error/403.jsp" />
+		<property name="filterChainDefinitions" value="#{shiroFilterManage.loadFilterChainDefinitions()}"/>
+		<property name="filters">
+			<map>
+				<!-- 
+				注意：/xxxx/** = user,anyRoles[system,general]， 注意红色的"anyRoles"一定要和
+				<entry key="anyRoles" value-ref="anyRoles"/> key一样就行， 否则过滤器不起作用，同样permission也一样 
+				-->
+				<entry key="authc" value-ref="formAuthenticationFilter" />
+				<entry key="login" value-ref="loginFilter" />
+				<entry key="anyRoles" value-ref="anyRolesFilter" />
+				<entry key="permission" value-ref="permissionFilter" />
+			</map>
+		</property>
+		<!--  
+		<property name="filterChainDefinitions">
+			<value>
+				/error/** = anon
+				/common/** = anon
+				/resources/** = anon
+				/index.html = anon
+				/login.shtml = anon
+				/loginCheck.shtml = anon
+				/loginOut.shtml = logout
+				/user/list.shtml = authc, permission[admin,guest]
+				/** = authc
+			</value>
+		</property>
+		-->
+	</bean>
+	
+	<bean id="formAuthenticationFilter" class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">
+		<property name="usernameParam" value="username" />
+		<property name="passwordParam" value="password" />
+		<!-- <property name="rememberMeParam" value="rememberMe"/> -->
+		<property name="loginUrl" value="/login.shtml" />
+	</bean>
+	
+</beans>
