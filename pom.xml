@@ -119,11 +119,6 @@
 			<version>1.8.5</version>
 		</dependency>
 		<!-- 导入java ee jar 包 -->
-		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>7.0</version>
-		</dependency>
 		<!-- 导入oracle包 -->
 		<!-- <dependency> -->
 		<!-- <groupId>com.oracle</groupId> -->
@@ -293,6 +288,12 @@
 			<groupId>net.mingsoft</groupId>
 			<artifactId>shiro-freemarker-tags</artifactId>
 			<version>0.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<artifactId>quartz</artifactId>
@@ -351,27 +352,41 @@
 			<version>0.9</version>
 		</dependency>
 		
+		<dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+		<dependency> 
+		   <groupId>javax.servlet.jsp</groupId> 
+		   <artifactId>jsp-api</artifactId> 
+		   <version>2.1</version> 
+		   <scope>provided</scope>
+		</dependency>
+
 		<!-- 微信SDK开发 Java -->
-<!-- 		<dependency> -->
-<!-- 		  <groupId>com.github.binarywang</groupId> -->
-<!-- 		  <artifactId>weixin-java-miniapp</artifactId> -->
-<!-- 		  <version>2.9.0</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 		  <groupId>com.github.binarywang</groupId> -->
-<!-- 		  <artifactId>weixin-java-pay</artifactId> -->
-<!-- 		  <version>2.9.0</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 		  <groupId>com.github.binarywang</groupId> -->
-<!-- 		  <artifactId>weixin-java-open</artifactId> -->
-<!-- 		  <version>2.9.0</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 		  <groupId>com.github.binarywang</groupId> -->
-<!-- 		  <artifactId>weixin-java-cp</artifactId> -->
-<!-- 		  <version>2.9.0</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.github.binarywang</groupId> -->
+		<!-- <artifactId>weixin-java-miniapp</artifactId> -->
+		<!-- <version>2.9.0</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.github.binarywang</groupId> -->
+		<!-- <artifactId>weixin-java-pay</artifactId> -->
+		<!-- <version>2.9.0</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.github.binarywang</groupId> -->
+		<!-- <artifactId>weixin-java-open</artifactId> -->
+		<!-- <version>2.9.0</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.github.binarywang</groupId> -->
+		<!-- <artifactId>weixin-java-cp</artifactId> -->
+		<!-- <version>2.9.0</version> -->
+		<!-- </dependency> -->
 
 	</dependencies>
 
@@ -404,6 +419,17 @@
 				<configuration>
 					<source>${jdk.version}</source>
 					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<port>8081</port>
+					<uriEncoding>UTF-8</uriEncoding>
+					<path>/goods-recommend</path>
+					<server>tomcat7</server>
 				</configuration>
 			</plugin>
 		</plugins>
