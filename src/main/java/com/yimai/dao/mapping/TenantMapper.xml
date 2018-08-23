@@ -8,7 +8,7 @@
     <result column="ratingRangeMin" property="ratingrangemin" jdbcType="INTEGER" />
     <result column="ratingRangeMax" property="ratingrangemax" jdbcType="INTEGER" />
     <result column="ratingRangeNeutral" property="ratingrangeneutral" jdbcType="DOUBLE" />
-    <result column="active" property="active" jdbcType="BIT" />
+    <result column="active" property="active" jdbcType="VARCHAR" />
     <result column="operatorid" property="operatorid" jdbcType="VARCHAR" />
     <result column="url" property="url" jdbcType="VARCHAR" />
     <result column="creationdate" property="creationdate" jdbcType="TIMESTAMP" />

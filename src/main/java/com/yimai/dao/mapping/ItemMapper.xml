@@ -9,7 +9,7 @@
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="url" property="url" jdbcType="VARCHAR" />
     <result column="imageurl" property="imageurl" jdbcType="VARCHAR" />
-    <result column="active" property="active" jdbcType="BIT" />
+    <result column="active" property="active" jdbcType="VARCHAR" />
     <result column="creationdate" property="creationdate" jdbcType="TIMESTAMP" />
     <result column="changedate" property="changedate" jdbcType="TIMESTAMP" />
   </resultMap>
