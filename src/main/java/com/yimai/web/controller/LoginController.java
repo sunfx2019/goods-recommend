@@ -70,12 +70,15 @@ public class LoginController extends AbctractBaseController {
 			SecurityUtils.getSubject().login(new UsernamePasswordToken(username, password));
 			return "redirect:/index.shtml";
 		} catch (UnknownAccountException e) {
+			log4j.error(e.getMessage(), e);
 			redirectAttributes.addFlashAttribute("message", "用户不存在！");
 			return "redirect:/login.shtml";
 		} catch (AuthenticationException e) {
+			log4j.error(e.getMessage(), e);
 			redirectAttributes.addFlashAttribute("message", "用户名或密码错误！");
 			return "redirect:/login.shtml";
 		} catch (Exception e) {
+			log4j.error(e.getMessage(), e);
 			redirectAttributes.addFlashAttribute("message", "登陆异常！");
 			return "redirect:/login.shtml";
 		}
